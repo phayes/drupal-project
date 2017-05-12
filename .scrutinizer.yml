@@ -1,0 +1,29 @@
+filter:
+    excluded_paths:
+        - web/*                # Drupal
+        - modules/tests/*      # Unit tests
+
+build:
+    dependencies:
+        before:
+            - mysql -u root --execute "CREATE DATABASE simpletest;"
+    environment:
+        php:
+            version: "7.0"
+        variables:
+            SIMPLETEST_DB: mysql://root@localhost/simpletest
+            SIMPLETEST_BASE_URL: http://local.dev
+        apache2:
+            modules: ['rewrite']
+            sites:
+                symfony_app:
+                    web_root: 'web/'
+                    host: 'local.dev'
+    tests:
+        override:
+            -
+                command: ./vendor/bin/phpunit -c core --testsuite unit --exclude-group Composer,DependencyInjection,PageCache
+                idle_timeout: 600
+                coverage:
+                    file: phpunit.report.coverage.xml
+                    format: clover
