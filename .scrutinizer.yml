@@ -1,7 +1,8 @@
 filter:
     excluded_paths:
         - web/*                # Drupal
-        - modules/tests/*      # Unit tests
+        - modules/*/tests/*    # Unit tests
+        - drush/contrib/*      # Drush contrib
 
 build:
     dependencies:
@@ -22,7 +23,7 @@ build:
     tests:
         override:
             -
-                command: ./vendor/bin/phpunit -c core --testsuite unit --exclude-group Composer,DependencyInjection,PageCache
+                command: ./vendor/bin/phpunit --testsuite my-drupal-project-name
                 idle_timeout: 600
                 coverage:
                     file: phpunit.report.coverage.xml

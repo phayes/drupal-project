@@ -1,0 +1,23 @@
+mysql:
+  image: mysql
+  environment:
+    MYSQL_DATABASE: drupal
+    MYSQL_ALLOW_EMPTY_PASSWORD: 1
+  ports:
+    - "3306:3306"
+
+drupal:
+  image: phayes/ubuntu-drupal-dev
+  volumes:
+    - .:/var/www
+  ports:
+    - "80:80"
+  links:
+    - mysql
+  environment:
+    DB_DATABASE: drupal
+    DB_USER: root
+    DB_HOST: mysql
+    DB_PORT: 3306
+    SIMPLETEST_BASE_URL: 'http://localhost'
+    SIMPLETEST_DB: mysql://root@mysql/drupal
